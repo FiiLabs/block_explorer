@@ -16,7 +16,7 @@ A server that synchronize meta chain data into a database
 
 ## Config Descriptiom
 
-### [config.toml](https://github.com/FiiLabs/block_explorer/blob/irishub/1.1.0/config/config.toml)
+### [config.toml](https://github.com/FiiLabs/block_explorer/blob/master/config/config.toml)
 
 ```text
 [database]
