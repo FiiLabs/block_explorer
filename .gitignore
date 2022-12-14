@@ -1,0 +1,5 @@
+.idea
+vendor
+block_explorer
+*.log
+build/
