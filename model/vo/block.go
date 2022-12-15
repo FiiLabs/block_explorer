@@ -11,3 +11,5 @@ type BlockResp struct {
 	Time     int64  `json:"time"`
 	Proposer string `json:"proposer"`
 }
+
+type BlocksResp []BlockResp

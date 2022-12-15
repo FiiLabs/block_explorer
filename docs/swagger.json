@@ -26,6 +26,60 @@
                     }
                 }
             }
+        },
+        "/block/height/{block_height}": {
+            "get": {
+                "description": "QueryBlockByHeight",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "explorer api service"
+                ],
+                "summary": "QueryBlockByHeight",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "height",
+                        "name": "block_height",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/vo.BlockResp"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "vo.BlockResp": {
+            "type": "object",
+            "properties": {
+                "hash": {
+                    "type": "string"
+                },
+                "height": {
+                    "type": "integer"
+                },
+                "proposer": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "integer"
+                },
+                "txn": {
+                    "type": "integer"
+                }
+            }
         }
     }
 }

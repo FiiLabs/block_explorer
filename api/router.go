@@ -35,5 +35,7 @@ func Routers(Router *gin.Engine) {
 
 func blkCtl(r *gin.RouterGroup) {
 	bctl := rest.BlockController{}
-	r.GET("/height/:block_height", bctl.Query)
+	r.GET("/height/:block_height", bctl.QueryByHeight)
+	r.GET("/hash/:block_hash", bctl.QueryByHash)
+	r.GET("/blocks", bctl.QueryBlocks)
 }

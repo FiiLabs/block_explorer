@@ -1,3 +1,17 @@
+definitions:
+  vo.BlockResp:
+    properties:
+      hash:
+        type: string
+      height:
+        type: integer
+      proposer:
+        type: string
+      time:
+        type: integer
+      txn:
+        type: integer
+    type: object
 info:
   contact: {}
 paths:
@@ -16,4 +30,25 @@ paths:
       summary: ping example
       tags:
       - example
+  /block/height/{block_height}:
+    get:
+      consumes:
+      - application/json
+      description: QueryBlockByHeight
+      parameters:
+      - description: height
+        in: path
+        name: block_height
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/vo.BlockResp'
+      summary: QueryBlockByHeight
+      tags:
+      - explorer api service
 swagger: "2.0"
