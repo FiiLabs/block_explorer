@@ -1,16 +1,19 @@
 package main
 
 import (
+	"github.com/FiiLabs/block_explorer/api"
 	"github.com/FiiLabs/block_explorer/config"
 	"github.com/FiiLabs/block_explorer/handlers"
 	"github.com/FiiLabs/block_explorer/libs/logger"
 	"github.com/FiiLabs/block_explorer/libs/pool"
 	"github.com/FiiLabs/block_explorer/models"
 	"github.com/FiiLabs/block_explorer/tasks"
+	"github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
-	"runtime"
 	"syscall"
+	"runtime"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -39,5 +42,16 @@ func main() {
 	signal.Notify(c, os.Interrupt, os.Kill, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 
 	tasks.Start(tasks.NewSyncTask(conf))
+
+
+	r := gin.Default()
+	api.Routers(r)
+
+	go func() {
+		logrus.Fatal(r.Run(conf.Server.IpPort))
+	}()
+
 	<-c
+
+	logrus.Println("Shutdown Server ...")
 }

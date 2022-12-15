@@ -22,6 +22,7 @@ type (
 	}
 
 	ServerConf struct {
+		IpPort                    string `mapstructure:"ip_port"`
 		NodeUrls                  string `mapstructure:"node_urls"`
 		WorkerNumCreateTask       int    `mapstructure:"worker_num_create_task"`
 		WorkerNumExecuteTask      int    `mapstructure:"worker_num_execute_task"`

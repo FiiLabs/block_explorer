@@ -3,6 +3,7 @@ node_uri= "mongodb://127.0.0.1:27017/?connect=direct&authSource=irita"
 database= "irita"
 
 [server]
+ip_port="127.0.0.1:8787"
 node_urls="http://127.0.0.1:26657"
 worker_num_create_task=1
 worker_num_execute_task=30
