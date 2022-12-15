@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/FiiLabs/block_explorer/api/rest"
 	docs "github.com/FiiLabs/block_explorer/docs"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -27,5 +28,12 @@ func Routers(Router *gin.Engine) {
 		c.JSON(http.StatusOK, "ok")
 	})
 	Router.GET("/abc", Helloworld)
+	blockRouter := Router.Group("block")
+	blkCtl(blockRouter)
 	Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+}
+
+func blkCtl(r *gin.RouterGroup) {
+	bctl := rest.BlockController{}
+	r.GET("/height/:block_height", bctl.Query)
 }

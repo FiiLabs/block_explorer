@@ -7,13 +7,13 @@ import (
 	"github.com/FiiLabs/block_explorer/libs/logger"
 	"github.com/FiiLabs/block_explorer/libs/pool"
 	"github.com/FiiLabs/block_explorer/models"
+	"github.com/gin-gonic/gin"
 	"github.com/FiiLabs/block_explorer/tasks"
 	"github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
-	"syscall"
 	"runtime"
-	"github.com/gin-gonic/gin"
+	"syscall"
 )
 
 func main() {
