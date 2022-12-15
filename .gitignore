@@ -3,3 +3,5 @@ vendor
 block_explorer
 *.log
 build/
+data/
+cosmos-sync
