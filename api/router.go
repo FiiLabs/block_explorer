@@ -8,28 +8,16 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"net/http"
 )
-// @BasePath /abc
 
-// PingExample godoc
-// @Summary ping example
-// @Schemes
-// @Description do ping
-// @Tags example
-// @Accept json
-// @Produce json
-// @Success 200 {string} Helloworld
-// @Router /abc [get]
-func Helloworld(g *gin.Context)  {
-	g.JSON(http.StatusOK,"helloworld")
-}
 func Routers(Router *gin.Engine) {
 	docs.SwaggerInfo.BasePath = ""
 	Router.GET("", func(c *gin.Context) {
 		c.JSON(http.StatusOK, "ok")
 	})
-	Router.GET("/abc", Helloworld)
 	blockRouter := Router.Group("block")
 	blkCtl(blockRouter)
+	txRouter := Router.Group("tx")
+	txCtl(txRouter)
 	Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
 
@@ -38,4 +26,10 @@ func blkCtl(r *gin.RouterGroup) {
 	r.GET("/height/:block_height", bctl.QueryByHeight)
 	r.GET("/hash/:block_hash", bctl.QueryByHash)
 	r.GET("/blocks", bctl.QueryBlocks)
+}
+
+func txCtl(r *gin.RouterGroup) {
+	txctl := rest.TxController{}
+	r.GET("/hash/:tx_hash", txctl.QueryByHash)
+	r.GET("/block_txs/:block_height", txctl.QueryTxsByBlockHeight)
 }

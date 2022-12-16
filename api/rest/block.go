@@ -26,13 +26,13 @@ func (bctl *BlockController) QueryByHeight(c *gin.Context) {
 }
 
 func (bctl *BlockController) QueryByHash(c *gin.Context) {
-	blkHeight := c.Param("block_hash")
-	if blkHeight == "" {
+	blkHash := c.Param("block_hash")
+	if blkHash == "" {
 		c.JSON(http.StatusBadRequest, response.FailBadRequest("parameter block_hash is required"))
 		return
 	}
 
-	res, e := blockService.QueryBlockByHash(blkHeight)
+	res, e := blockService.QueryBlockByHash(blkHash)
 	if e != nil {
 		c.JSON(response.HttpCode(e), response.FailError(e))
 		return

@@ -6,4 +6,5 @@ import (
 
 var (
 	blockService    service.IBlockService    = new(service.BlockService)
+	txService       service.ITxService       = new(service.TxService)
 )

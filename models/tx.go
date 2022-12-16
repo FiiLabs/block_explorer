@@ -34,7 +34,25 @@ type (
 		TxIndex   uint32        `bson:"tx_index"`
 		Ext       interface{}   `bson:"ext"`
 	}
-
+	Tx2 struct {
+		TxId      int64         `bson:"tx_id"`
+		Time      int64         `bson:"time"`
+		Height    int64         `bson:"height"`
+		TxHash    string        `bson:"tx_hash"`
+		Type      string        `bson:"type"` // parse from first msg
+		Memo      string        `bson:"memo"`
+		Status    uint32        `bson:"status"`
+		Log       string        `bson:"log"`
+		Fee       *Fee          `bson:"fee"`
+		GasUsed   int64         `bson:"gas_used"`
+		Types     []string      `bson:"types"`
+		EventsNew []*EventNew    `bson:"events_new"`
+		Signers   []string      `bson:"signers"`
+		DocTxMsgs []*TxMsg    `bson:"msgs"`
+		Addrs     []string      `bson:"addrs"`
+		TxIndex   uint32        `bson:"tx_index"`
+		Ext       interface{}   `bson:"ext"`
+	}
 	Event struct {
 		Type       string   `bson:"type"`
 		Attributes []KvPair `bson:"attributes"`
@@ -48,6 +66,18 @@ type (
 	EventNew struct {
 		MsgIndex uint32  `bson:"msg_index" json:"msg_index"`
 		Events   []Event `bson:"events"`
+	}
+	TxMsg struct {
+		Type string `bson:"type" json:"type"`
+		Msg  bson.M `bson:"msg" json:"msg"`
+	}
+	Fee struct {
+		Amount []*Coin `bson:"amount" json:"amount"`
+		Gas    int64   `bson:"gas" json:"gas"`
+	}
+	Coin struct {
+		Denom  string `bson:"denom" json:"denom"`
+		Amount string `bson:"amount" json:"amount"`
 	}
 )
 
