@@ -18,6 +18,10 @@ func Routers(Router *gin.Engine) {
 	blkCtl(blockRouter)
 	txRouter := Router.Group("tx")
 	txCtl(txRouter)
+	nftClsRouter := Router.Group("nftcls")
+	nftClsCtl(nftClsRouter)
+	nftRouter := Router.Group("nft")
+	nftCtl(nftRouter)
 	Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
 
@@ -32,4 +36,14 @@ func txCtl(r *gin.RouterGroup) {
 	txctl := rest.TxController{}
 	r.GET("/hash/:tx_hash", txctl.QueryByHash)
 	r.GET("/block_txs/:block_height", txctl.QueryTxsByBlockHeight)
+}
+
+func nftClsCtl(r *gin.RouterGroup) {
+	nftclsctl := rest.NFTClsController{}
+	r.GET("/clses", nftclsctl.QueryNFTCls)
+}
+
+func nftCtl(r *gin.RouterGroup) {
+	nftctl := rest.NFTController{}
+	r.GET("/nfts", nftctl.QueryNFT)
 }
