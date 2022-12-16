@@ -49,8 +49,6 @@ func InitRouter(conf *config.Config) {
 				resRouteClient[msgparser.IbcTransferRouteKey] = msgparser.RouteClientMap[one]
 			case msgparser.TIbcRouteKey:
 				resRouteClient[msgparser.TIbcTransferRouteKey] = msgparser.RouteClientMap[one]
-			case msgparser.NftRouteKey:
-				resRouteClient[msgparser.NftRouteKey] = msgparser.RouteClientMap[one]
 			}
 		}
 		if len(resRouteClient) > 0 {
@@ -524,7 +522,7 @@ const (
 	AttrKeyAction       = "action"
 
 	EventTypeMintNFT    = "mint_nft"
-	AttrKeyNFTId        = "nft_id"
+	AttrKeyNFTId        = "token_id"
 )
 
 func ParseAttrValueFromEvents(events []models.Event, typ, attrKey string) string {
