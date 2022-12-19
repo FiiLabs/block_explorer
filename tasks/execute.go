@@ -9,6 +9,7 @@ import (
 	"github.com/FiiLabs/block_explorer/models"
 	"github.com/FiiLabs/block_explorer/utils"
 	"github.com/FiiLabs/block_explorer/utils/constant"
+	//"github.com/cosmos/cosmos-sdk/types"
 	"github.com/qiniu/qmgo"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -355,14 +356,15 @@ func saveDocsWithTxn(blockDoc *models.Block, txDocs []*models.Tx, nftClses []*mo
 				return nil, err
 			}
 		}
-		sizeNFTs := len(nfts)
-		if sizeNFTs == 1 {
-			if _, err := nftCli.InsertOne(sessCtx, nfts[0]); err != nil {
-				return nil, err
-			}
-		} else if sizeNFTs > 1 {
-			if _, err := nftCli.InsertMany(sessCtx, nfts); err != nil {
-				return nil, err
+		for _, v := range nfts {
+			if v.GetAction() == models.TxActionNFTMint {
+				if _, err := nftCli.InsertOne(sessCtx, v); err != nil {
+					return nil, err
+				}
+			} else if v.GetAction() == models.TxActionNFTBurn {
+				if err := nftCli.RemoveId(sessCtx, v.GetID()); err != nil {
+					return nil, err
+				}
 			}
 		}
 		cond := bson.M{"_id": taskDoc.ID, "status": bson.M{"$in": []string{models.SyncTaskStatusUnderway, models.SyncTaskStatusUnHandled}}}

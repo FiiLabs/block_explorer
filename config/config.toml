@@ -20,4 +20,4 @@ support_modules=""
 deny_modules=""
 support_types=""
 ignore_ibc_header=false
-start_task=false
+start_task=true
