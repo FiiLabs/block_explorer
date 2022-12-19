@@ -346,14 +346,22 @@ func saveDocsWithTxn(blockDoc *models.Block, txDocs []*models.Tx, nftClses []*mo
 				return nil, err
 			}
 		}
-		sizeNFTClses := len(nftClses)
-		if sizeNFTClses == 1 {
-			if _, err := nftClsCli.InsertOne(sessCtx, nftClses[0]); err != nil {
-				return nil, err
-			}
-		} else if sizeNFTClses > 1 {
-			if _, err := nftClsCli.InsertMany(sessCtx, nftClses); err != nil {
-				return nil, err
+		for _, v := range nftClses {
+			if v.GetAction() == models.TxActionNFTClsMint {
+				if _, err := nftClsCli.InsertOne(sessCtx, v); err != nil {
+					return nil, err
+				}
+			} else if v.GetAction() == models.TxActionNFTClsTransfer {
+				cond := bson.M{"_id": v.GetID()}
+				update := bson.M{
+					"$set": bson.M{
+						"id":           v.Id,
+						"sender": v.Sender,
+					},
+				}
+				if err := nftClsCli.UpdateOne(sessCtx, cond,update); err != nil {
+					return nil, err
+				}
 			}
 		}
 		for _, v := range nfts {

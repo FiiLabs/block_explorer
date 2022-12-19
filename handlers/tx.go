@@ -146,7 +146,7 @@ func ParseBlockAndTxs(b int64, client *pool.Client) (*models.Block, []*models.Tx
 			if txDoc.TxHash != "" && len(txDoc.Type) > 0 {
 				txDocs = append(txDocs, &txDoc)
 			}
-			if nftCls.ClsName != "" {
+			if nftCls.Id != "" {
 				nftClses = append(nftClses, &nftCls)
 			}
 			if nftx.Id != "" {
@@ -290,6 +290,26 @@ func parseTx(txBytes types.Tx, txResult *types2.ResponseDeliverTx, block *types.
 				nftCls.UriHash           = nftIssueDenomMsg.UriHash
 				nftCls.Data              = nftIssueDenomMsg.Data
 				nftCls.Time              = docTx.Time
+				nftCls.SetAction(models.TxActionNFTClsMint)
+			}
+		case MsgTypeTransferDenom:
+			if docTx.Status == constant.TxStatusFail {
+				break
+			}
+
+			// get nft_id from events then set to msg, because this msg hasn't nft_id
+			nftclsId := ParseAttrValueFromEvents(docTx.EventsNew[i].Events, EventTypeTransferNFTCls, AttrKeyDenomId)
+			msgDocInfo.DocTxMsg.Msg.(*nft.DocMsgTransferDenom).Id = nftclsId
+			if nftClsTransferMsg, ok := msgDocInfo.DocTxMsg.Msg.(*nft.DocMsgTransferDenom); ok {
+				nftCls.Id                = nftClsTransferMsg.Id
+				tid,err := nftCls.GetNFTClsById(nftCls.Id)
+				if err == nil {
+					nftCls.SetID(tid)
+				}
+				nftCls.Id                = nftClsTransferMsg.Id
+				nftCls.Sender            = nftClsTransferMsg.Recipient
+				nftCls.Time              = docTx.Time
+				nftCls.SetAction(models.TxActionNFTClsTransfer)
 			}
 		case MsgTypeNFTMint:
 			if docTx.Status == constant.TxStatusFail {
@@ -541,6 +561,7 @@ const (
 	EventTypeMintNFT    = "mint_nft"
 	AttrKeyNFTId        = "token_id"
 	EventTypeBurnNFT    = "burn_nft"
+	EventTypeTransferNFTCls    = "transfer_denom"
 )
 
 func ParseAttrValueFromEvents(events []models.Event, typ, attrKey string) string {
