@@ -16,6 +16,8 @@ type ActionNFT int
 const (
 	TxActionNFTMint ActionNFT = iota
 	TxActionNFTBurn
+	TxActionNFTEdit
+	TxActionNFTTransfer
 )
 type (
 

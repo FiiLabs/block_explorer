@@ -331,6 +331,54 @@ func parseTx(txBytes types.Tx, txResult *types2.ResponseDeliverTx, block *types.
 				nftx.Time              = docTx.Time
 				nftx.SetAction(models.TxActionNFTMint)
 			}
+		case MsgTypeNFTTransfer:
+			if docTx.Status == constant.TxStatusFail {
+				break
+			}
+
+			// get nft_id from events then set to msg, because this msg hasn't nft_id
+			nftId := ParseAttrValueFromEvents(docTx.EventsNew[i].Events, EventTypeTransferNFT, AttrKeyNFTId)
+			msgDocInfo.DocTxMsg.Msg.(*nft.DocMsgNFTTransfer).Id = nftId
+			if nftTransferMsg, ok := msgDocInfo.DocTxMsg.Msg.(*nft.DocMsgNFTTransfer); ok {
+				nftx.Id                = nftTransferMsg.Id
+				tid,err := nftx.GetNFTById(nftx.Id)
+				if err == nil {
+					nftx.SetID(tid)
+				}
+				nftx.NTFName           = nftTransferMsg.Name
+				nftx.DenomId           = nftTransferMsg.Denom
+				nftx.URI               = nftTransferMsg.URI
+				nftx.Data              = nftTransferMsg.Data
+				nftx.Sender            = nftTransferMsg.Sender
+				nftx.Recipient         = nftTransferMsg.Recipient
+				nftx.UriHash           = nftTransferMsg.UriHash
+				nftx.Time              = docTx.Time
+				nftx.SetAction(models.TxActionNFTTransfer)
+			}
+		case MsgTypeNFTEdit:
+			if docTx.Status == constant.TxStatusFail {
+				break
+			}
+
+			// get nft_id from events then set to msg, because this msg hasn't nft_id
+			nftId := ParseAttrValueFromEvents(docTx.EventsNew[i].Events, EventTypeEditNFT, AttrKeyNFTId)
+			msgDocInfo.DocTxMsg.Msg.(*nft.DocMsgNFTEdit).Id = nftId
+			if nftTransferMsg, ok := msgDocInfo.DocTxMsg.Msg.(*nft.DocMsgNFTEdit); ok {
+				nftx.Id                = nftTransferMsg.Id
+				tid,err := nftx.GetNFTById(nftx.Id)
+				if err == nil {
+					nftx.SetID(tid)
+				}
+				nftx.NTFName           = nftTransferMsg.Name
+				nftx.DenomId           = nftTransferMsg.Denom
+				nftx.URI               = nftTransferMsg.URI
+				nftx.Data              = nftTransferMsg.Data
+				nftx.Sender            = nftTransferMsg.Sender
+				nftx.UriHash           = nftTransferMsg.UriHash
+				nftx.Recipient         = nftTransferMsg.Sender
+				nftx.Time              = docTx.Time
+				nftx.SetAction(models.TxActionNFTEdit)
+			}
 		case MsgTypeNFTBurn:
 			if docTx.Status == constant.TxStatusFail {
 				break
@@ -562,6 +610,8 @@ const (
 	AttrKeyNFTId        = "token_id"
 	EventTypeBurnNFT    = "burn_nft"
 	EventTypeTransferNFTCls    = "transfer_denom"
+	EventTypeTransferNFT    = "transfer_nft"
+	EventTypeEditNFT    = "edit_nft"
 )
 
 func ParseAttrValueFromEvents(events []models.Event, typ, attrKey string) string {

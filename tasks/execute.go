@@ -373,6 +373,24 @@ func saveDocsWithTxn(blockDoc *models.Block, txDocs []*models.Tx, nftClses []*mo
 				if err := nftCli.RemoveId(sessCtx, v.GetID()); err != nil {
 					return nil, err
 				}
+			}else if v.GetAction() == models.TxActionNFTTransfer || v.GetAction() == models.TxActionNFTEdit {
+				cond := bson.M{"_id": v.GetID()}
+				update := bson.M{
+					"$set": bson.M{
+						"id":           v.Id,
+						"name": v.NTFName,
+						"denomId":v.DenomId,
+						"uri":v.URI,
+						"data":v.Data,
+						"sender": v.Sender,
+						"recipient":v.Recipient,
+						"uriHash":v.UriHash,
+						"time":v.Time,
+					},
+				}
+				if err := nftCli.UpdateOne(sessCtx, cond,update); err != nil {
+					return nil, err
+				}
 			}
 		}
 		cond := bson.M{"_id": taskDoc.ID, "status": bson.M{"$in": []string{models.SyncTaskStatusUnderway, models.SyncTaskStatusUnHandled}}}
