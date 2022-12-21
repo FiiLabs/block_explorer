@@ -12,6 +12,7 @@ type IBlockRepo interface {
 	GetBlockByHeight(height string) (*models.Block, error)
 	GetBlockByHash(hash string) (*models.Block, error)
 	GetBlocks(t_page string, t_size string) ([]*models.Block, error)
+	GetLBlocks() ([]*models.Block, error)
 }
 var _ IBlockRepo = new(BlockRepo)
 
@@ -57,5 +58,12 @@ func (repo *BlockRepo) GetBlocks(t_page string, t_size string) ([]*models.Block,
 		return nil, errT
 	}
 	err := repo.coll().Find(context.Background(), bson.M{}).Sort("height").Skip(pageT*10).Limit(sizeT).All(&res)
+	return res, err
+}
+
+func (repo *BlockRepo) GetLBlocks() ([]*models.Block, error) {
+	var res []*models.Block
+
+	err := repo.coll().Find(context.Background(), bson.M{}).Sort("-height").Limit(10).All(&res)
 	return res, err
 }

@@ -7,6 +7,7 @@ import (
 
 type INFTClsService interface {
 	QueryNFTCls(p_page string, p_size string) (*vo.NFTClsesResp, errors.Error)
+	GetNFTClsCount() (int64, errors.Error)
 }
 
 var _ INFTClsService = new(NFTClsService)
@@ -36,4 +37,13 @@ func (svc *NFTClsService) QueryNFTCls(p_page string, p_size string) (*vo.NFTClse
 		nftclses[i].Time = v.Time
 	}
 	return &nftclses, nil
+}
+
+func (svc *NFTClsService) GetNFTClsCount() (int64, errors.Error) {
+
+	n, err := nftClsRepo.GetNFTClsCount()
+	if err != nil {
+		return 0, errors.Wrap(err)
+	}
+	return n,nil
 }

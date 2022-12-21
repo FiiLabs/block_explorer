@@ -53,3 +53,14 @@ func (bctl *BlockController) QueryBlocks(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response.Success(res))
 }
+
+func (bctl *BlockController) QueryLBlocks(c *gin.Context) {
+
+	res, e := blockService.QueryLBlocks()
+	if e != nil {
+		c.JSON(response.HttpCode(e), response.FailError(e))
+		return
+	}
+
+	c.JSON(http.StatusOK, response.Success(res))
+}

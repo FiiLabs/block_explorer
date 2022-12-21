@@ -10,6 +10,7 @@ import (
 
 type INFTClsRepo interface {
 	GetNFTCls(t_page string, t_size string) ([]*models.NFTCls, error)
+	GetNFTClsCount() (int64, error)
 }
 var _ INFTClsRepo = new(NFTClsRepo)
 
@@ -31,4 +32,10 @@ func (repo *NFTClsRepo) GetNFTCls(t_page string, t_size string) ([]*models.NFTCl
 	}
 	err := repo.coll().Find(context.Background(), bson.M{}).Sort("time").Skip(pageT*10).Limit(sizeT).All(&res)
 	return res, err
+}
+
+func (repo *NFTClsRepo) GetNFTClsCount() (int64, error) {
+
+	n,err := repo.coll().Find(context.Background(), bson.M{}).Count()
+	return n, err
 }

@@ -10,6 +10,7 @@ import (
 
 type INFTRepo interface {
 	GetNFT(t_page string, t_size string) ([]*models.NFT, error)
+	GetNFTCount() (int64, error)
 }
 var _ INFTRepo = new(NFTRepo)
 
@@ -31,4 +32,10 @@ func (repo *NFTRepo) GetNFT(t_page string, t_size string) ([]*models.NFT, error)
 	}
 	err := repo.coll().Find(context.Background(), bson.M{}).Sort("time").Skip(pageT*10).Limit(sizeT).All(&res)
 	return res, err
+}
+
+func (repo *NFTRepo) GetNFTCount() (int64, error) {
+
+	n,err := repo.coll().Find(context.Background(), bson.M{}).Count()
+	return n, err
 }

@@ -22,6 +22,8 @@ func Routers(Router *gin.Engine) {
 	nftClsCtl(nftClsRouter)
 	nftRouter := Router.Group("nft")
 	nftCtl(nftRouter)
+	infoRouter := Router.Group("info")
+	infoCtl(infoRouter)
 	Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
 
@@ -30,12 +32,15 @@ func blkCtl(r *gin.RouterGroup) {
 	r.GET("/height/:block_height", bctl.QueryByHeight)
 	r.GET("/hash/:block_hash", bctl.QueryByHash)
 	r.GET("/blocks", bctl.QueryBlocks)
+	r.GET("/lblocks", bctl.QueryLBlocks)
 }
 
 func txCtl(r *gin.RouterGroup) {
 	txctl := rest.TxController{}
 	r.GET("/hash/:tx_hash", txctl.QueryByHash)
 	r.GET("/block_txs/:block_height", txctl.QueryTxsByBlockHeight)
+	r.GET("/txs", txctl.QueryTxs)
+	r.GET("/ltxs", txctl.QueryLTxs)
 }
 
 func nftClsCtl(r *gin.RouterGroup) {
@@ -46,4 +51,12 @@ func nftClsCtl(r *gin.RouterGroup) {
 func nftCtl(r *gin.RouterGroup) {
 	nftctl := rest.NFTController{}
 	r.GET("/nfts", nftctl.QueryNFT)
+}
+
+func infoCtl(r *gin.RouterGroup) {
+	infoctl := rest.InfoController{}
+	r.GET("/blocks", infoctl.QueryLatestHeight)
+	r.GET("/txs", infoctl.QueryLatestTx)
+	r.GET("/nftclses", infoctl.QueryNFTClsCount)
+	r.GET("/nfts", infoctl.QueryNFTCount)
 }

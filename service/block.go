@@ -8,6 +8,7 @@ type IBlockService interface {
 	QueryBlockByHeight(height string) (*vo.BlockResp, errors.Error)
 	QueryBlockByHash(hash string) (*vo.BlockResp, errors.Error)
 	QueryBlocks(p_page string, p_size string) (*vo.BlocksResp, errors.Error)
+	QueryLBlocks() (*vo.BlocksResp, errors.Error)
 }
 
 var _ IBlockService = new(BlockService)
@@ -57,6 +58,22 @@ func (svc *BlockService) QueryBlockByHash(hash string) (*vo.BlockResp, errors.Er
 func (svc *BlockService) QueryBlocks(p_page string, p_size string) (*vo.BlocksResp, errors.Error) {
 
 	blocks,err := blockRepo.GetBlocks(p_page, p_size)
+	if err != nil {
+		return nil, errors.Wrap(err)
+	}
+	blks := make(vo.BlocksResp, len(blocks))
+	for i, v := range blocks {
+		blks[i].Txn = v.Txn
+		blks[i].Height = v.Height
+		blks[i].Hash = v.Hash
+		blks[i].Time = v.Time
+		blks[i].Proposer = v.Proposer
+	}
+	return &blks, nil
+}
+func (svc *BlockService) QueryLBlocks() (*vo.BlocksResp, errors.Error) {
+
+	blocks,err := blockRepo.GetLBlocks()
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}

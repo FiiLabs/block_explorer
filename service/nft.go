@@ -7,6 +7,7 @@ import (
 
 type INFTService interface {
 	QueryNFT(p_page string, p_size string) (*vo.NFTsResp, errors.Error)
+	GetNFTCount() (int64, errors.Error)
 }
 
 var _ INFTService = new(NFTService)
@@ -32,4 +33,12 @@ func (svc *NFTService) QueryNFT(p_page string, p_size string) (*vo.NFTsResp, err
 		nfts[i].Time = v.Time
 	}
 	return &nfts, nil
+}
+
+func (svc *NFTService) GetNFTCount() (int64, errors.Error) {
+	n,err := nftRepo.GetNFTCount()
+	if err != nil {
+		return 0, errors.Wrap(err)
+	}
+	return n, nil
 }
