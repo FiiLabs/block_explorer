@@ -51,10 +51,9 @@ func (txctl *TxController) QueryLTxs(c *gin.Context) {
 	c.JSON(http.StatusOK, response.Success(res))
 }
 func (txctl *TxController) QueryTxs(c *gin.Context) {
-	q_page := c.DefaultQuery("page", "0")
-	q_size := c.DefaultQuery("size", "10")
+	q_num := c.DefaultQuery("size", "10")
 
-	res, e := txService.GetTxs(q_page, q_size)
+	res, e := txService.GetTxs(q_num)
 	if e != nil {
 		c.JSON(response.HttpCode(e), response.FailError(e))
 		return

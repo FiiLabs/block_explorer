@@ -42,10 +42,9 @@ func (bctl *BlockController) QueryByHash(c *gin.Context) {
 }
 
 func (bctl *BlockController) QueryBlocks(c *gin.Context) {
-	q_page := c.DefaultQuery("page", "0")
-	q_size := c.DefaultQuery("size", "10")
+	q_num := c.DefaultQuery("num", "10")
 
-	res, e := blockService.QueryBlocks(q_page, q_size)
+	res, e := blockService.QueryBlocks(q_num)
 	if e != nil {
 		c.JSON(response.HttpCode(e), response.FailError(e))
 		return

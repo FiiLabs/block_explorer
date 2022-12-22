@@ -7,7 +7,7 @@ import (
 type IBlockService interface {
 	QueryBlockByHeight(height string) (*vo.BlockResp, errors.Error)
 	QueryBlockByHash(hash string) (*vo.BlockResp, errors.Error)
-	QueryBlocks(p_page string, p_size string) (*vo.BlocksResp, errors.Error)
+	QueryBlocks(p_num string) (*vo.BlocksResp, errors.Error)
 	QueryLBlocks() (*vo.BlocksResp, errors.Error)
 }
 
@@ -55,9 +55,9 @@ func (svc *BlockService) QueryBlockByHash(hash string) (*vo.BlockResp, errors.Er
 	}, nil
 }
 
-func (svc *BlockService) QueryBlocks(p_page string, p_size string) (*vo.BlocksResp, errors.Error) {
+func (svc *BlockService) QueryBlocks(p_num string) (*vo.BlocksResp, errors.Error) {
 
-	blocks,err := blockRepo.GetBlocks(p_page, p_size)
+	blocks,err := blockRepo.GetBlocks(p_num)
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}

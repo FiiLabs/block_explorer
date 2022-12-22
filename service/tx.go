@@ -9,7 +9,7 @@ type ITxService interface {
 	QueryTransactionByHash(hash string) (*vo.TxResp, errors.Error)
 	QueryTxsByHeight(height string) (*vo.TxsResp, errors.Error)
 	GetTxsCount() (int64, errors.Error)
-	GetTxs(p_page string, p_size string) (*vo.TxsResp, errors.Error)
+	GetTxs(q_num string) (*vo.TxsResp, errors.Error)
 	GetLTxs() (*vo.TxsResp, errors.Error)
 }
 
@@ -82,9 +82,9 @@ func (svc *TxService) GetTxsCount() (int64, errors.Error) {
 
 	return n, nil
 }
-func (svc *TxService) GetTxs(p_page string, p_size string) (*vo.TxsResp, errors.Error) {
+func (svc *TxService) GetTxs(q_num string) (*vo.TxsResp, errors.Error) {
 
-	txBatch,err := txRepo.GetTxs(p_page, p_size)
+	txBatch,err := txRepo.GetTxs(q_num)
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
