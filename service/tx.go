@@ -11,6 +11,7 @@ type ITxService interface {
 	GetTxsCount() (int64, errors.Error)
 	GetTxs(q_num string) (*vo.TxsResp, errors.Error)
 	GetLTxs() (*vo.TxsResp, errors.Error)
+	GetTxsByAddress(address string,q_page string, q_size string) (*vo.TxsResp, errors.Error)
 }
 
 var _ ITxService = new(TxService)
@@ -112,6 +113,34 @@ func (svc *TxService) GetTxs(q_num string) (*vo.TxsResp, errors.Error) {
 func (svc *TxService) GetLTxs() (*vo.TxsResp, errors.Error) {
 
 	txBatch,err := txRepo.GetLTxs()
+	if err != nil {
+		return nil, errors.Wrap(err)
+	}
+	txs := make(vo.TxsResp, len(txBatch))
+	for i, tx := range txBatch {
+		txs[i].TxId = tx.TxId
+		txs[i].TxTime = tx.Time
+		txs[i].Height = tx.Height
+		txs[i].TxHash = tx.TxHash
+		txs[i].Type = tx.Type
+		txs[i].Memo = tx.Memo
+		txs[i].Status = tx.Status
+		txs[i].Log = tx.Log
+		txs[i].Fee = tx.Fee
+		txs[i].GasUsed = tx.Fee.Gas
+		txs[i].Types = tx.Types
+		txs[i].EventsNew = tx.EventsNew
+		txs[i].Signers = tx.Signers
+		txs[i].Msgs = tx.DocTxMsgs
+		txs[i].Addrs = tx.Addrs
+		txs[i].TxIndex = tx.TxIndex
+	}
+	return &txs, nil
+}
+
+func (svc *TxService) GetTxsByAddress(address string,q_page string, q_size string) (*vo.TxsResp, errors.Error) {
+
+	txBatch,err := txRepo.GetTxsByAddress(address, q_page, q_size)
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}

@@ -24,6 +24,8 @@ func Routers(Router *gin.Engine) {
 	nftCtl(nftRouter)
 	infoRouter := Router.Group("info")
 	infoCtl(infoRouter)
+	adrRouter := Router.Group("address")
+	adrCtl(adrRouter)
 	Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
 
@@ -59,4 +61,9 @@ func infoCtl(r *gin.RouterGroup) {
 	r.GET("/txs", infoctl.QueryLatestTx)
 	r.GET("/nftclses", infoctl.QueryNFTClsCount)
 	r.GET("/nfts", infoctl.QueryNFTCount)
+}
+
+func adrCtl(r *gin.RouterGroup) {
+	adrctl := rest.AddressController{}
+	r.GET("/txs/:address", adrctl.QueryTxs)
 }
