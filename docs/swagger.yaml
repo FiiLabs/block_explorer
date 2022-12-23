@@ -12,43 +12,274 @@ definitions:
       txn:
         type: integer
     type: object
+  vo.NFTClsResp:
+    properties:
+      data:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      mintRestricted:
+        type: boolean
+      name:
+        type: string
+      schema:
+        type: string
+      sender:
+        type: string
+      symbol:
+        type: string
+      time:
+        type: integer
+      updateRestricted:
+        type: boolean
+      uri:
+        type: string
+      uriHash:
+        type: string
+    type: object
+  vo.NFTResp:
+    properties:
+      data:
+        type: string
+      denomId:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      recipient:
+        type: string
+      sender:
+        type: string
+      time:
+        type: integer
+      uri:
+        type: string
+      uriHash:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
-  /abc:
+  /address/txs/{address}:
     get:
-      consumes:
-      - application/json
-      description: do ping
-      produces:
-      - application/json
+      description: 获取某地址的交易列表
+      parameters:
+      - description: address
+        in: path
+        name: address
+        required: true
+        type: string
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: size
+        in: query
+        name: size
+        type: integer
+      responses: {}
+      summary: 获取某地址的交易列表
+      tags:
+      - address
+  /block/blocks:
+    get:
+      description: 查询最近产生的区块,最大可查到50个区块
+      parameters:
+      - description: number
+        in: query
+        name: num
+        type: integer
       responses:
         "200":
           description: OK
           schema:
-            type: string
-      summary: ping example
+            items:
+              $ref: '#/definitions/vo.BlockResp'
+            type: array
+      summary: 查询最近产生的区块
       tags:
-      - example
+      - block
+  /block/hash/{block_hash}:
+    get:
+      description: 通过hash查询区块
+      parameters:
+      - description: hash
+        in: path
+        name: block_hash
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/vo.BlockResp'
+      summary: 通过hash查询区块
+      tags:
+      - block
   /block/height/{block_height}:
     get:
-      consumes:
-      - application/json
-      description: QueryBlockByHeight
+      description: 通过高度查询区块
       parameters:
       - description: height
         in: path
         name: block_height
         required: true
         type: string
-      produces:
-      - application/json
       responses:
         "200":
           description: OK
           schema:
             $ref: '#/definitions/vo.BlockResp'
-      summary: QueryBlockByHeight
+      summary: 通过高度查询区块
       tags:
-      - explorer api service
+      - block
+  /block/lblocks:
+    get:
+      description: 查询最近10个区块，用在首页展示
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/vo.BlockResp'
+            type: array
+      summary: 查询最近10个区块
+      tags:
+      - block
+  /info/blocks:
+    get:
+      description: 查询区块总数
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+      summary: 查询区块总数
+      tags:
+      - info
+  /info/nftclses:
+    get:
+      description: 查询NFT类别总数
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+      summary: 查询NFT类别总数
+      tags:
+      - info
+  /info/nfts:
+    get:
+      description: 查询NFT总数
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+      summary: 查询NFT总数
+      tags:
+      - info
+  /info/txs:
+    get:
+      description: 查询交易总数
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+      summary: 查询交易总数
+      tags:
+      - info
+  /nft/nfts:
+    get:
+      description: 查询NFT，可以分页查询
+      parameters:
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: size
+        in: query
+        name: size
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/vo.NFTResp'
+            type: array
+      summary: 查询NFT
+      tags:
+      - NFT
+  /nftcls/clses:
+    get:
+      description: 查询NFT类别，可以分页查询
+      parameters:
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: size
+        in: query
+        name: size
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/vo.NFTClsResp'
+            type: array
+      summary: 查询NFT类别
+      tags:
+      - NFTClass
+  /tx/block_txs/{block_height}:
+    get:
+      description: 查询区块的所有交易
+      parameters:
+      - description: height
+        in: path
+        name: block_height
+        required: true
+        type: integer
+      responses: {}
+      summary: 查询区块的所有交易
+      tags:
+      - transaction
+  /tx/hash/{tx_hash}:
+    get:
+      description: 通过hash查询交易
+      parameters:
+      - description: hash
+        in: path
+        name: tx_hash
+        required: true
+        type: string
+      responses: {}
+      summary: 通过hash查询交易
+      tags:
+      - transaction
+  /tx/ltxs:
+    get:
+      description: 查询最近10笔交易，用在首页展示
+      responses: {}
+      summary: 查询最近10笔交易
+      tags:
+      - transaction
+  /tx/txs:
+    get:
+      description: 查询最近交易，最多可以查询50笔
+      parameters:
+      - description: number
+        in: query
+        name: num
+        type: integer
+      responses: {}
+      summary: 查询最近交易
+      tags:
+      - transaction
 swagger: "2.0"

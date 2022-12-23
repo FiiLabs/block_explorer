@@ -19,7 +19,7 @@ var (
 
 func initIrisPrefix() {
 	const (
-		Bech32ChainPrefix = "i"
+		Bech32ChainPrefix = "metaos"
 		PrefixAcc         = "a"
 		PrefixValidator   = "v"
 		PrefixConsensus   = "c"

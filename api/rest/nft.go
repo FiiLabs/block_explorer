@@ -8,7 +8,13 @@ import (
 
 type NFTController struct {
 }
-
+// @Summary 查询NFT
+// @Description 查询NFT，可以分页查询
+// @Param page query		int	false	"page"
+// @Param size query		int	false	"size"
+// @Tags NFT
+// @Success 200 {object} vo.NFTsResp
+// @Router /nft/nfts [get]
 func (nctl *NFTController) QueryNFT(c *gin.Context) {
 	q_page := c.DefaultQuery("page", "0")
 	q_size := c.DefaultQuery("size", "10")

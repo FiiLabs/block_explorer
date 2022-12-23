@@ -16,15 +16,6 @@ var _ IBlockService = new(BlockService)
 type BlockService struct {
 }
 
-// @Summary QueryBlockByHeight
-// @Param block_height path string true "height"
-// @Schemes
-// @Description QueryBlockByHeight
-// @Tags explorer api service
-// @Accept json
-// @Produce json
-// @Success 200 {object} vo.BlockResp
-// @Router /block/height/{block_height} [get]
 func (svc *BlockService) QueryBlockByHeight(height string) (*vo.BlockResp, errors.Error) {
 
 	block,err := blockRepo.GetBlockByHeight(height)

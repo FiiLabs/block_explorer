@@ -8,7 +8,13 @@ import (
 
 type AddressController struct {
 }
-
+//	@Summary		获取某地址的交易列表
+//	@Description	获取某地址的交易列表
+// @Tags address
+//	@Param			address	path		string	true	"address"
+//	@Param			page	query		int	false	"page"
+//	@Param			size	query		int	false	"size"
+//	@Router			/address/txs/{address} [get]
 func (actl *AddressController) QueryTxs(c *gin.Context) {
 	address := c.Param("address")
 	q_page := c.DefaultQuery("page", "0")

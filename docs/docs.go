@@ -16,24 +16,86 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/abc": {
+        "/address/txs/{address}": {
             "get": {
-                "description": "do ping",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
+                "description": "获取某地址的交易列表",
                 "tags": [
-                    "example"
+                    "address"
                 ],
-                "summary": "ping example",
+                "summary": "获取某地址的交易列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "address",
+                        "name": "address",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "size",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/block/blocks": {
+            "get": {
+                "description": "查询最近产生的区块,最大可查到50个区块",
+                "tags": [
+                    "block"
+                ],
+                "summary": "查询最近产生的区块",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "number",
+                        "name": "num",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/vo.BlockResp"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/block/hash/{block_hash}": {
+            "get": {
+                "description": "通过hash查询区块",
+                "tags": [
+                    "block"
+                ],
+                "summary": "通过hash查询区块",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "hash",
+                        "name": "block_hash",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/vo.BlockResp"
                         }
                     }
                 }
@@ -41,17 +103,11 @@ const docTemplate = `{
         },
         "/block/height/{block_height}": {
             "get": {
-                "description": "QueryBlockByHeight",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
+                "description": "通过高度查询区块",
                 "tags": [
-                    "explorer api service"
+                    "block"
                 ],
-                "summary": "QueryBlockByHeight",
+                "summary": "通过高度查询区块",
                 "parameters": [
                     {
                         "type": "string",
@@ -69,6 +125,228 @@ const docTemplate = `{
                         }
                     }
                 }
+            }
+        },
+        "/block/lblocks": {
+            "get": {
+                "description": "查询最近10个区块，用在首页展示",
+                "tags": [
+                    "block"
+                ],
+                "summary": "查询最近10个区块",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/vo.BlockResp"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/info/blocks": {
+            "get": {
+                "description": "查询区块总数",
+                "tags": [
+                    "info"
+                ],
+                "summary": "查询区块总数",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            }
+        },
+        "/info/nftclses": {
+            "get": {
+                "description": "查询NFT类别总数",
+                "tags": [
+                    "info"
+                ],
+                "summary": "查询NFT类别总数",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            }
+        },
+        "/info/nfts": {
+            "get": {
+                "description": "查询NFT总数",
+                "tags": [
+                    "info"
+                ],
+                "summary": "查询NFT总数",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            }
+        },
+        "/info/txs": {
+            "get": {
+                "description": "查询交易总数",
+                "tags": [
+                    "info"
+                ],
+                "summary": "查询交易总数",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            }
+        },
+        "/nft/nfts": {
+            "get": {
+                "description": "查询NFT，可以分页查询",
+                "tags": [
+                    "NFT"
+                ],
+                "summary": "查询NFT",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "size",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/vo.NFTResp"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/nftcls/clses": {
+            "get": {
+                "description": "查询NFT类别，可以分页查询",
+                "tags": [
+                    "NFTClass"
+                ],
+                "summary": "查询NFT类别",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "size",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/vo.NFTClsResp"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tx/block_txs/{block_height}": {
+            "get": {
+                "description": "查询区块的所有交易",
+                "tags": [
+                    "transaction"
+                ],
+                "summary": "查询区块的所有交易",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "height",
+                        "name": "block_height",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/tx/hash/{tx_hash}": {
+            "get": {
+                "description": "通过hash查询交易",
+                "tags": [
+                    "transaction"
+                ],
+                "summary": "通过hash查询交易",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "hash",
+                        "name": "tx_hash",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/tx/ltxs": {
+            "get": {
+                "description": "查询最近10笔交易，用在首页展示",
+                "tags": [
+                    "transaction"
+                ],
+                "summary": "查询最近10笔交易",
+                "responses": {}
+            }
+        },
+        "/tx/txs": {
+            "get": {
+                "description": "查询最近交易，最多可以查询50笔",
+                "tags": [
+                    "transaction"
+                ],
+                "summary": "查询最近交易",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "number",
+                        "name": "num",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
             }
         }
     },
@@ -90,6 +368,79 @@ const docTemplate = `{
                 },
                 "txn": {
                     "type": "integer"
+                }
+            }
+        },
+        "vo.NFTClsResp": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "mintRestricted": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "schema": {
+                    "type": "string"
+                },
+                "sender": {
+                    "type": "string"
+                },
+                "symbol": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "integer"
+                },
+                "updateRestricted": {
+                    "type": "boolean"
+                },
+                "uri": {
+                    "type": "string"
+                },
+                "uriHash": {
+                    "type": "string"
+                }
+            }
+        },
+        "vo.NFTResp": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "string"
+                },
+                "denomId": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "recipient": {
+                    "type": "string"
+                },
+                "sender": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "integer"
+                },
+                "uri": {
+                    "type": "string"
+                },
+                "uriHash": {
+                    "type": "string"
                 }
             }
         }
