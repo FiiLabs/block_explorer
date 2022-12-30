@@ -12,6 +12,6 @@ apk add --no-cache $PACKAGES && make all
 
 FROM alpine:3.10
 
-COPY --from=builder /go/src/cosmos-sync /usr/local/bin
-
-CMD cosmos-sync
+COPY --from=builder /go/src/block_explorer /usr/local/bin
+EXPOSE 8787
+CMD block_explorer

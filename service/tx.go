@@ -36,7 +36,7 @@ func (svc *TxService) QueryTransactionByHash(hash string) (*vo.TxResp, errors.Er
 		Status:   tx.Status,
 		Log:      tx.Log,
 		Fee:      tx.Fee,
-		GasUsed:  tx.Fee.Gas,
+		GasUsed:  tx.GasUsed,
 		Types:    tx.Types,
 		EventsNew: tx.EventsNew,
 		Signers:  tx.Signers,
@@ -63,7 +63,7 @@ func (svc *TxService) QueryTxsByHeight(height string) (*vo.TxsResp, errors.Error
 	txs[i].Status = tx.Status
 	txs[i].Log = tx.Log
 	txs[i].Fee = tx.Fee
-	txs[i].GasUsed = tx.Fee.Gas
+	txs[i].GasUsed = tx.GasUsed
 	txs[i].Types = tx.Types
 	txs[i].EventsNew = tx.EventsNew
 	txs[i].Signers = tx.Signers
@@ -100,7 +100,7 @@ func (svc *TxService) GetTxs(q_num string) (*vo.TxsResp, errors.Error) {
 		txs[i].Status = tx.Status
 		txs[i].Log = tx.Log
 		txs[i].Fee = tx.Fee
-		txs[i].GasUsed = tx.Fee.Gas
+		txs[i].GasUsed = tx.GasUsed
 		txs[i].Types = tx.Types
 		txs[i].EventsNew = tx.EventsNew
 		txs[i].Signers = tx.Signers
@@ -127,7 +127,7 @@ func (svc *TxService) GetLTxs() (*vo.TxsResp, errors.Error) {
 		txs[i].Status = tx.Status
 		txs[i].Log = tx.Log
 		txs[i].Fee = tx.Fee
-		txs[i].GasUsed = tx.Fee.Gas
+		txs[i].GasUsed = tx.GasUsed
 		txs[i].Types = tx.Types
 		txs[i].EventsNew = tx.EventsNew
 		txs[i].Signers = tx.Signers
@@ -155,7 +155,7 @@ func (svc *TxService) GetTxsByAddress(address string,q_page string, q_size strin
 		txs[i].Status = tx.Status
 		txs[i].Log = tx.Log
 		txs[i].Fee = tx.Fee
-		txs[i].GasUsed = tx.Fee.Gas
+		txs[i].GasUsed = tx.GasUsed
 		txs[i].Types = tx.Types
 		txs[i].EventsNew = tx.EventsNew
 		txs[i].Signers = tx.Signers
