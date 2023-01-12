@@ -211,5 +211,5 @@ require (
 replace (
 	github.com/cosmos/cosmos-sdk => github.com/bianjieai/cosmos-sdk v0.46.5-irita-20221201
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
-	github.com/tendermint/tendermint => github.com/FiiLabs/tendermint v0.34.24-irita-221229
+	github.com/tendermint/tendermint => github.com/FiiLabs/tendermint v0.34.24-0.20230110043212-44a9d738ed27
 )

@@ -1,6 +1,6 @@
 # block_explorer
 
-A backend server that synchronize meta chain data into a database
+A backend server that synchronize metaos chain data into a database
 
 # SetUp
 
@@ -24,7 +24,7 @@ Mongo-express(a web-based MongoDB admin interface): http://localhost:8081
 
 ### Db config
 
-- **node_uri**: `required` `string` mongodb connection uri（example: `mongodb://127.0.0.1:27017/?connect=direct&authSource=irita`）
+- **node_uri**: `required` `string` mongodb connection uri（example: `mongodb://127.0.0.1:27017/?connect=direct&authSource=metaos`）
 - database：`required` `string` database name（example：`DB_DATABASE`）
 
 ### Server config
@@ -39,12 +39,12 @@ Mongo-express(a web-based MongoDB admin interface): http://localhost:8081
 - block_num_per_worker_handle: `required` `int`  number of blocks per sync TX task（example: `50`）
 - max_connection_num: `required` `int` client pool config total max connection
 - init_connection_num: `required` `int` client pool config idle connection
-- bech32_acc_prefix: `option` `string` block chain address prefix（default(cosmoshub): `` example(irishub): `iaa`）
+- bech32_acc_prefix: `option` `string` block chain address prefix（default(cosmoshub): `` example(metaos): `metaos`）
 - chain_block_interval: `option` `int` block interval; default `5` (example: `5`)
 - behind_block_num: `option` `int` wait block num to handle when retry failed; default `0` (example: `0`)
 - promethous_port: `option` `int` promethous metrics server port
 - support_modules: `option` `string` setting only support module tx sync,default
-  support [all module](https://github.com/FiiLabs/block_explorer/blob/irishub/1.1.0/libs/msgparser/types.go) (default: ``
+  support [all module] (default: ``
   example: `bank,nft`)
 - deny_modules: `option` `string` disable support module tx sync
 - support_types: `option` `string` setting only support msgType tx sync,default support all types(default: ``
@@ -55,7 +55,7 @@ Mongo-express(a web-based MongoDB admin interface): http://localhost:8081
 
 Note:
 > synchronizes cosmos data from specify block height(such as:17908 current time:1576208532)
-> At first,stop the cosmos-sync and create the task. Run:
+> At first,stop the block_explorer and create the task. Run:
 
   ```
   db.sync_task.insert({

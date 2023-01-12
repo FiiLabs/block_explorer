@@ -1,6 +1,6 @@
 [database]
-node_uri= "mongodb://127.0.0.1:27017/?connect=direct&authSource=irita"
-database= "irita"
+node_uri= "mongodb://127.0.0.1:27017/?connect=direct&authSource=metaos"
+database= "metaos"
 
 [server]
 ip_port=":8787"
@@ -11,7 +11,7 @@ worker_max_sleep_time=120
 block_num_per_worker_handle=100
 max_connection_num=100
 init_connection_num=5
-bech32_acc_prefix="iaa"
+bech32_acc_prefix="metaos"
 chain_id="testnet"
 chain_block_interval=5
 behind_block_num=0
